@@ -136,7 +136,7 @@ write.csv(test_pred_df, file="test_predictions.csv", row.names=FALSE)
 ```
 
 # Notes
-- The code for this report is available at [this GitHub repository]
+- The code for this report is available at [this GitHub repository](https://github.com/InfinityAkshay/Practical-Machine-Learning)
 - The report is generated using R Markdown
 - The analysis is done with a seed of `1234`
 - The packages used are:
