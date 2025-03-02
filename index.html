@@ -466,10 +466,10 @@ conf_matrix</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 4464    1    0    0    0
+##          A 4463    1    0    0    0
 ##          B    0 3037    1    0    0
 ##          C    0    0 2737    1    0
-##          D    0    0    0 2572    1
+##          D    1    0    0 2572    1
 ##          E    0    0    0    0 2885
 ## 
 ## Overall Statistics
@@ -479,23 +479,23 @@ conf_matrix</code></pre>
 ##     No Information Rate : 0.2843          
 ##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
 ##                                           
-##                   Kappa : 0.9997          
+##                   Kappa : 0.9996          
 ##                                           
 ##  Mcnemar&#39;s Test P-Value : NA              
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            1.0000   0.9997   0.9996   0.9996   0.9997
-## Specificity            0.9999   0.9999   0.9999   0.9999   1.0000
-## Pos Pred Value         0.9998   0.9997   0.9996   0.9996   1.0000
-## Neg Pred Value         1.0000   0.9999   0.9999   0.9999   0.9999
+## Sensitivity            0.9998   0.9997   0.9996   0.9996   0.9997
+## Specificity            0.9999   0.9999   0.9999   0.9998   1.0000
+## Pos Pred Value         0.9998   0.9997   0.9996   0.9992   1.0000
+## Neg Pred Value         0.9999   0.9999   0.9999   0.9999   0.9999
 ## Prevalence             0.2843   0.1935   0.1744   0.1639   0.1838
 ## Detection Rate         0.2843   0.1935   0.1743   0.1638   0.1838
-## Detection Prevalence   0.2844   0.1935   0.1744   0.1639   0.1838
-## Balanced Accuracy      1.0000   0.9998   0.9998   0.9998   0.9998</code></pre>
+## Detection Prevalence   0.2843   0.1935   0.1744   0.1640   0.1838
+## Balanced Accuracy      0.9998   0.9998   0.9998   0.9997   0.9998</code></pre>
 <p>The model performs really well on the training data with an accuracy
-of <code>99.9745207%</code>.</p>
+of <code>99.9681508%</code>.</p>
 </div>
 <div id="validation-data" class="section level2">
 <h2>Validation Data</h2>
@@ -507,36 +507,36 @@ conf_matrix</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1113    9    1    0    0
-##          B    1  742    8    0    0
-##          C    2    6  669   12    2
-##          D    0    1    6  629    4
-##          E    0    1    0    2  715
+##          A 1112    9    1    0    1
+##          B    2  741    8    0    0
+##          C    2    7  669   12    2
+##          D    0    1    6  630    3
+##          E    0    1    0    1  715
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.986           
-##                  95% CI : (0.9818, 0.9894)
+##                Accuracy : 0.9857          
+##                  95% CI : (0.9815, 0.9892)
 ##     No Information Rate : 0.2845          
 ##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
 ##                                           
-##                   Kappa : 0.9823          
+##                   Kappa : 0.9819          
 ##                                           
 ##  Mcnemar&#39;s Test P-Value : NA              
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.9973   0.9776   0.9781   0.9782   0.9917
-## Specificity            0.9964   0.9972   0.9932   0.9966   0.9991
-## Pos Pred Value         0.9911   0.9880   0.9682   0.9828   0.9958
-## Neg Pred Value         0.9989   0.9946   0.9954   0.9957   0.9981
+## Sensitivity            0.9964   0.9763   0.9781   0.9798   0.9917
+## Specificity            0.9961   0.9968   0.9929   0.9970   0.9994
+## Pos Pred Value         0.9902   0.9867   0.9668   0.9844   0.9972
+## Neg Pred Value         0.9986   0.9943   0.9954   0.9960   0.9981
 ## Prevalence             0.2845   0.1935   0.1744   0.1639   0.1838
-## Detection Rate         0.2837   0.1891   0.1705   0.1603   0.1823
-## Detection Prevalence   0.2863   0.1914   0.1761   0.1631   0.1830
-## Balanced Accuracy      0.9969   0.9874   0.9856   0.9874   0.9954</code></pre>
+## Detection Rate         0.2835   0.1889   0.1705   0.1606   0.1823
+## Detection Prevalence   0.2863   0.1914   0.1764   0.1631   0.1828
+## Balanced Accuracy      0.9962   0.9866   0.9855   0.9884   0.9955</code></pre>
 <p>The model performs well on the validation data with an accuracy of
-<code>98.5980117%</code>.</p>
+<code>98.572521%</code>.</p>
 </div>
 </div>
 <div id="predictions" class="section level1">
@@ -551,8 +551,8 @@ write.csv(test_pred_df, file=&quot;test_predictions.csv&quot;, row.names=FALSE)<
 <div id="notes" class="section level1">
 <h1>Notes</h1>
 <ul>
-<li>The code for this report is available at [this GitHub
-repository]</li>
+<li>The code for this report is available at <a href="https://github.com/InfinityAkshay/Practical-Machine-Learning">this
+GitHub repository</a></li>
 <li>The report is generated using R Markdown</li>
 <li>The analysis is done with a seed of <code>1234</code></li>
 <li>The packages used are:
