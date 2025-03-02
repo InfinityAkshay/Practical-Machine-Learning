@@ -1,0 +1,146 @@
+---
+title: "Weight Lifting Prediction"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(caret)
+set.seed(1234)
+```
+
+# Introduction
+****
+The WLE(Weight Lifting Exercise) Dataset consists of data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants.
+Along with the data, it also contains a varaibe `classe` which denotes the quality of the exercie. The values `classe` can take are:
+
+- **A**: exactly according to the specification
+- **B**: throwing the elbows to the front
+- **C**: lifting the dumbbell only halfway
+- **D**: lowering the dumbbell only halfway
+- **E**: throwing the hips to the front 
+
+Our goal in this exercise is to predict the `classe` variable using the other variables in the dataset.
+
+# Data
+The data is available at the following URLs:
+
+- [Training Data](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv)
+- [Test Data](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv)
+
+We will train the model on the training data and then predict the `classe` variable for the test data.
+
+## Downloading the data
+Let us first download the data from the URLs.
+```{r}
+train_url <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
+test_url  <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv"
+
+train_file <- "pml-training.csv"
+test_file  <- "pml-testing.csv"
+
+if (!file.exists(train_file)) {
+  download.file(train_url, destfile=train_file)
+}
+
+if (!file.exists(test_file)) {
+  download.file(test_url, destfile=test_file)
+}
+```
+
+## Loading and Cleaning the Data
+Now that we have downloaded the data, let us load it into R.
+```{r cache=TRUE}
+train_data <- read.csv(train_file)
+test_data  <- read.csv(test_file)
+```
+
+Before working on the data, we should clean it. First, let us remove the columns we won't ned, like timestamps, user names, etc.
+```{r}
+columns_to_remove <- c(1:7)
+train_data <- train_data[, -columns_to_remove]
+test_data  <- test_data[, -columns_to_remove]
+```
+
+Next, let us remove the columns with missing values.
+```{r}
+non_na_cols <- colSums(is.na(train_data)) == 0 & colSums(is.na(test_data)) == 0
+train_data <- train_data[, non_na_cols]
+test_data  <- test_data[, non_na_cols]
+```
+
+Finally, let us set the `classe` variable as a factor.
+```{r}
+train_data$classe <- factor(train_data$classe)
+```
+
+## Splitting the Data
+Since the test data does not have the `classe` variable, we will not be able to see how our model performs on it.
+So, in order to estimate out of sample error, we will split the training data into two parts: training and validation.
+We will train the model on the training data and then predict the `classe` variable for the validation data.
+```{r}
+inTrain <- createDataPartition(train_data$classe, p=0.8, list=FALSE)
+training <- train_data[inTrain, ]
+validation <- train_data[-inTrain, ]
+```
+
+# Methodology
+We will use the **Random Forest** algorithm to predict the `classe` variable.
+The parameters for our training algorithm will be:
+
+- Methodology: Random Forests
+- No. of folds for cross validation: 5
+- No. of trees: 7
+- Maximum depth of trees: 10
+
+```{r cache=TRUE}
+cv <- trainControl(method="cv", number=5)
+model <- train(
+    classe ~ ., 
+    data=training, 
+    method="rf", 
+    trControl=cv, 
+    ntree=7, 
+    maxDepth=10
+)
+```
+
+# Results
+Now that we have trained the model, let us see how it performs on the training and validation data.
+
+## Training Data
+```{r}
+train_pred <- predict(model, training)
+conf_matrix <- confusionMatrix(train_pred, training$classe)
+accuracy <- as.double(conf_matrix$overall["Accuracy"])
+conf_matrix
+```
+The model performs really well on the training data with an accuracy of ``r accuracy*100`%`.
+
+## Validation Data
+```{r}
+validation_pred <- predict(model, validation)
+conf_matrix <- confusionMatrix(validation_pred, validation$classe)
+accuracy <- as.double(conf_matrix$overall["Accuracy"])
+conf_matrix
+```
+The model performs well on the validation data with an accuracy of ``r accuracy*100`%`.
+
+# Predictions
+Now that we have trained the model, let us predict the `classe` variable for the test data and save it to `test_predictions.csv`.
+```{r}
+test_pred <- predict(model, test_data)
+test_pred_df <- data.frame(problem_id = test_data$problem_id, classe = test_pred)
+write.csv(test_pred_df, file="test_predictions.csv", row.names=FALSE)
+```
+
+# Notes
+- The code for this report is available at [this GitHub repository]
+- The report is generated using R Markdown
+- The analysis is done with a seed of `1234`
+- The packages used are:
+    - `caret`: `r packageVersion("caret")`
+    - `knitr`: `r packageVersion("knitr")`
+
+
